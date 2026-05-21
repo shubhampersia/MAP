@@ -8,7 +8,7 @@ const WIDTH = 980;
 const HEIGHT = 520;
 
 const projection = geoEqualEarth()
-  .scale(273)
+  .scale(235)
   .translate([WIDTH / 2.1, HEIGHT / 1.7]);
 const pathGen = geoPath(projection);
 
