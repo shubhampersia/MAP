@@ -8,8 +8,8 @@ const WIDTH = 980;
 const HEIGHT = 520;
 
 const projection = geoEqualEarth()
-  .scale(175)
-  .translate([WIDTH / 2, HEIGHT / 2]);
+  .scale(273)
+  .translate([WIDTH / 2.1, HEIGHT / 1.7]);
 const pathGen = geoPath(projection);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,18 +27,126 @@ type Office = {
 };
 
 const OFFICES: Office[] = [
-  { name: "San Francisco", country: "USA", coords: [-122.4194, 37.7749], type: "hq", unit: "Global Headquarters", team: 240, since: 2014, focus: ["Product", "Engineering", "Leadership"] },
-  { name: "New York", country: "USA", coords: [-74.006, 40.7128], type: "office", unit: "Sales & Partnerships", team: 95, since: 2017, focus: ["Sales", "Customer Success"] },
-  { name: "São Paulo", country: "Brazil", coords: [-46.6333, -23.5505], type: "office", unit: "LATAM Operations", team: 42, since: 2020, focus: ["Operations", "Localization"] },
-  { name: "London", country: "UK", coords: [-0.1276, 51.5074], type: "office", unit: "EMEA Headquarters", team: 130, since: 2016, focus: ["Sales", "Finance", "Legal"] },
-  { name: "Berlin", country: "Germany", coords: [13.405, 52.52], type: "office", unit: "Engineering Hub", team: 78, since: 2018, focus: ["Engineering", "Design"] },
-  { name: "Lagos", country: "Nigeria", coords: [3.3792, 6.5244], type: "partner", unit: "Delivery Partner", team: 18, since: 2022, focus: ["Implementation"] },
-  { name: "Dubai", country: "UAE", coords: [55.2708, 25.2048], type: "office", unit: "MENA Office", team: 36, since: 2021, focus: ["Sales", "Strategic Accounts"] },
-  { name: "Bangalore", country: "India", coords: [77.5946, 12.9716], type: "office", unit: "R&D Center", team: 210, since: 2015, focus: ["Engineering", "QA", "Support"] },
-  { name: "Singapore", country: "Singapore", coords: [103.8198, 1.3521], type: "office", unit: "APAC Headquarters", team: 72, since: 2018, focus: ["Sales", "Operations"] },
-  { name: "Tokyo", country: "Japan", coords: [139.6917, 35.6895], type: "office", unit: "Japan Office", team: 28, since: 2019, focus: ["Sales", "Customer Success"] },
-  { name: "Sydney", country: "Australia", coords: [151.2093, -33.8688], type: "partner", unit: "Reseller Partner", team: 12, since: 2023, focus: ["Sales"] },
-  { name: "Cape Town", country: "South Africa", coords: [18.4241, -33.9249], type: "partner", unit: "Africa Partner", team: 9, since: 2023, focus: ["Implementation"] },
+  {
+    name: "Ohio",
+    country: "United States of America",
+    coords: [-82.9988, 40.4173],
+    type: "office",
+    unit: "Manufacturing",
+    team: 40,
+    since: 2018,
+    focus: ["Production"],
+  },
+
+  {
+    name: "Arkansas",
+    country: "United States of America",
+    coords: [-92.3731, 34.7465],
+    type: "office",
+    unit: "Operations",
+    team: 28,
+    since: 2019,
+    focus: ["Supply Chain"],
+  },
+
+  {
+    name: "Stevensville",
+    country: "United States of America",
+    coords: [-79.8170, 39.3187],
+    type: "hq",
+    unit: "HQ",
+    team: 120,
+    since: 2014,
+    focus: ["Leadership", "Engineering"],
+  },
+
+  {
+    name: "North Carolina",
+    country: "United States of America",
+    coords: [-79.0193, 35.7596],
+    type: "office",
+    unit: "Distribution",
+    team: 35,
+    since: 2020,
+    focus: ["Logistics"],
+  },
+
+  {
+    name: "Pune",
+    country: "India",
+    coords: [73.8567, 18.5204],
+    type: "office",
+    unit: "India Operations",
+    team: 85,
+    since: 2017,
+    focus: ["Engineering", "QA"],
+  },
+
+  {
+    name: "South India",
+    country: "India",
+    coords: [77.5946, 12.9716],
+    type: "partner",
+    unit: "South Operations",
+    team: 50,
+    since: 2021,
+    focus: ["Support"],
+  },
+
+  {
+    name: "North China",
+    country: "China",
+    coords: [116.4074, 39.9042],
+    type: "office",
+    unit: "North China Manufacturing",
+    team: 60,
+    since: 2016,
+    focus: ["Manufacturing"],
+  },
+
+  {
+    name: "South China",
+    country: "China",
+    coords: [113.2644, 23.1291],
+    type: "partner",
+    unit: "South China Supply",
+    team: 48,
+    since: 2018,
+    focus: ["Production"],
+  },
+
+  {
+    name: "Vietnam",
+    country: "Vietnam",
+    coords: [105.8342, 21.0278],
+    type: "office",
+    unit: "Vietnam Operations",
+    team: 42,
+    since: 2019,
+    focus: ["Assembly"],
+  },
+
+  {
+    name: "Malaysia",
+    country: "Malaysia",
+    coords: [101.6869, 3.139],
+    type: "office",
+    unit: "Malaysia Operations",
+    team: 30,
+    since: 2020,
+    focus: ["Logistics"],
+  },
+
+  {
+    name: "South Korea",
+    country: "South Korea",
+    coords: [126.978, 37.5665],
+    type: "office",
+    unit: "Korea Office",
+    team: 38,
+    since: 2018,
+    focus: ["Electronics"],
+  },
 ];
 
 const TYPE_LABEL: Record<Office["type"], string> = {
@@ -141,7 +249,11 @@ function MapContent({
                 style={{ transition: "stroke-width 250ms, opacity 250ms" }}
               />
               {/* Traveling pulse along the arc */}
-              <circle r={isActive ? 3 : 1.8} fill="var(--map-accent)" opacity={isActive ? 1 : 0.7}>
+              <circle r={isActive ? 3 : 1.8} fill={
+  o.type === "partner" || o.name === "Stevensville"
+    ? "#4DA3FF"
+    : "#FFC107"
+} opacity={isActive ? 1 : 0.7}>
                 <animateMotion
                   dur={`${4 + (i % 5) * 0.6}s`}
                   repeatCount="indefinite"
@@ -170,10 +282,13 @@ function MapContent({
             onMouseLeave={() => onHoverOffice(null)}
             style={{ cursor: "pointer" }}
           >
-            <circle
-              r={r + (isHover ? 10 : 6)}
-              fill="var(--map-accent-glow)"
-              opacity={isHover ? 0.95 : 0.35}
+<circle
+  r={r + (isHover ? 10 : 6)}
+fill={
+  o.type === "partner" || o.name === "Stevensville"
+    ? "#4DA3FF"
+    : "#FFC107"
+}
             >
               <animate
                 attributeName="r"
@@ -188,9 +303,13 @@ function MapContent({
                 repeatCount="indefinite"
               />
             </circle>
-            <circle
-              r={isHover ? r + 1.2 : r}
-              fill="var(--map-accent)"
+<circle
+  r={isHover ? r + 1.2 : r}
+   fill={
+    o.type === "partner" || o.name === "Stevensville"
+      ? "#4DA3FF"
+      : "#FFC107"
+  }
               stroke="white"
               strokeWidth={isHQ ? 1.4 : 0.9}
               style={{ transition: "r 200ms" }}
@@ -206,20 +325,10 @@ export default function WorldPresenceMap() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredOffice, setHoveredOffice] = useState<string | null>(null);
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [lockedOffice, setLockedOffice] = useState<string | null>(null);
 
   // Auto-cycle spotlight through offices
-  useEffect(() => {
-    if (paused || hoveredOffice || lockedOffice) return;
-    const id = setInterval(() => {
-      setActiveIndex((i) => (i + 1) % OFFICES.length);
-    }, 2600);
-    return () => clearInterval(id);
-  }, [paused, hoveredOffice, lockedOffice]);
 
-  const activeOffice = hoveredOffice ?? lockedOffice ?? OFFICES[activeIndex].name;
+  const activeOffice = hoveredOffice;
 
   const stats = useMemo(
     () => ({
@@ -241,8 +350,7 @@ export default function WorldPresenceMap() {
             Operating across {stats.countries} countries
           </h2>
           <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-            A live network connects our HQ to every regional hub. Hover a
-            marker or country to inspect a location.
+            MMI operates a fully integrated production network across the US, India, China, Vietnam and South Korea, utilizing each region’s specialized capabilities.
           </p>
         </div>
         <div className="flex gap-6 text-sm">
@@ -252,21 +360,17 @@ export default function WorldPresenceMap() {
         </div>
       </div>
 
-      <div
-        ref={containerRef}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => {
-          setPaused(false);
-          setHoveredCountry(null);
-        }}
-        className="relative overflow-hidden rounded-2xl border border-white/10 bg-[color:var(--map-bg)] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
-      >
+<div
+  ref={containerRef}
+  onMouseLeave={() => {
+    setHoveredCountry(null);
+    setHoveredOffice(null);
+  }}
+  className="relative overflow-hidden rounded-2xl border border-white/10 bg-[color:var(--map-bg)] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+>
         <MapContent
           hoveredOffice={hoveredOffice}
-          onHoverOffice={(name) => {
-            setHoveredOffice(name);
-            if (name) setLockedOffice(name);
-          }}
+          onHoverOffice={setHoveredOffice}
           activeOffice={activeOffice}
           hoveredCountry={hoveredCountry}
           onHoverCountry={setHoveredCountry}
@@ -283,9 +387,6 @@ export default function WorldPresenceMap() {
         <LegendDot label="Headquarters" big />
         <LegendDot label="Office" />
         <LegendDot label="Partner" />
-        <span className="ml-auto text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
-          {paused ? "Paused" : "Auto-touring locations"}
-        </span>
       </div>
     </div>
   );
